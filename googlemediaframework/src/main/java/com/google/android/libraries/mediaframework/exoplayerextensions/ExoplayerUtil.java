@@ -26,7 +26,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 
-import com.google.android.exoplayer.ExoPlayerLibraryInfo;
+import com.google.android.exoplayer2.ExoPlayerLibraryInfo;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

@@ -16,6 +16,16 @@
 
 package com.google.android.libraries.mediaframework.exoplayerextensions;
 
+import android.net.Uri;
+
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.dash.DashMediaSource;
+import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
+import com.google.android.exoplayer2.source.hls.HlsMediaSource;
+import com.google.android.exoplayer2.upstream.DataSource;
+
 /**
  * Represents a video that can be played by Exoplayer.
  */
@@ -84,5 +94,27 @@ public class Video {
    */
   public VideoType getVideoType() {
     return videoType;
+  }
+
+
+  public MediaSource toMediaSource(DataSource.Factory manifestDataSourceFactory, DataSource.Factory mediaDataSourceFactory, android.os.Handler mainHandler) {
+    MediaSource mediaSource;
+    Uri uri = Uri.parse(getUrl());
+    switch (getVideoType()) {
+      case DASH:
+        mediaSource = new DashMediaSource(uri, manifestDataSourceFactory,
+                new DefaultDashChunkSource.Factory(mediaDataSourceFactory), mainHandler, null);
+        break;
+      case HLS:
+        mediaSource = new HlsMediaSource(uri, mediaDataSourceFactory, mainHandler, null);
+        break;
+      case MP4:
+      case OTHER:
+      default:
+        mediaSource = new ExtractorMediaSource(uri, mediaDataSourceFactory, new DefaultExtractorsFactory(),
+                mainHandler, null);
+    }
+
+    return mediaSource;
   }
 }

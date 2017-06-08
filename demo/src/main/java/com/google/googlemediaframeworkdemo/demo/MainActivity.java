@@ -19,23 +19,20 @@ package com.google.googlemediaframeworkdemo.demo;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.google.android.libraries.mediaframework.exoplayerextensions.Video;
-import com.google.android.libraries.mediaframework.layeredvideo.PlaybackControlLayer;
 import com.google.googlemediaframeworkdemo.demo.adplayer.ImaPlayer;
 
 /**
  * Displays a list of videos and plays them when they are selected.
  */
-public class MainActivity extends Activity implements PlaybackControlLayer.FullscreenCallback {
+public class MainActivity extends Activity {
 
   /**
    * The player which will be used to play the content videos and the ads.
@@ -123,22 +120,17 @@ public class MainActivity extends Activity implements PlaybackControlLayer.Fulls
     videoPlayerContainer.removeAllViews();
 
     String adTagUrl = videoListItem.adUrl;
-    String videoTitle = videoListItem.title;
 
     imaPlayer = new ImaPlayer(this,
         videoPlayerContainer,
         videoListItem.video,
-        videoTitle,
         adTagUrl);
-    imaPlayer.setFullscreenCallback(this);
 
     Resources res = getResources();
 
     // Customize the UI of the video player.
 
     // Set a logo (an Android icon will be displayed in the top left)
-    Drawable logo = res.getDrawable(R.drawable.gmf_icon);
-    imaPlayer.setLogoImage(logo);
 
     // Uncomment the following lines to set the color of the player's top chrome, bottom chrome, and
     // background to be a blue color.
@@ -165,44 +157,6 @@ public class MainActivity extends Activity implements PlaybackControlLayer.Fulls
     // When an action is triggered (either by clicking it in the dialog box when the video player is
     // not in fullscreen or by clicking its corresponding button when the video player is in
     // fullscreen), it will display a toast message.
-    imaPlayer.addActionButton(
-        res.getDrawable(R.drawable.ic_action_share),
-        getString(R.string.option1),
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View view) {
-            Toast.makeText(MainActivity.this,
-                getString(R.string.clicked_option_1),
-                Toast.LENGTH_SHORT)
-                .show();
-          }
-        }
-    );
-    imaPlayer.addActionButton(
-        getResources().getDrawable(R.drawable.ic_action_discard),
-        getString(R.string.option2),
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View view) {
-            Toast.makeText(MainActivity.this,
-                getString(R.string.clicked_option_2),
-                Toast.LENGTH_SHORT)
-                .show();
-          }
-        }
-    );
-    imaPlayer.addActionButton(
-        getResources().getDrawable(R.drawable.ic_action_favorite),
-        getString(R.string.option3),
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View view) {
-            Toast.makeText(MainActivity.this,
-                getString(R.string.clicked_option_3),
-                Toast.LENGTH_SHORT)
-                .show();
-          }
-        });
 
     // Now that the player is set up, let's start playing.
     imaPlayer.play();
@@ -273,23 +227,6 @@ public class MainActivity extends Activity implements PlaybackControlLayer.Fulls
             "&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite" +
             "%26sample_ar%3Dpremidpostpod&cmsid=496&vid=short_onecue&correlator="),
     };
-  }
-
-  /**
-   * When the video player goes into fullscreen, hide the video list so that the video player can
-   * occupy the entire screen.
-   */
-  @Override
-  public void onGoToFullscreen() {
-    videoListView.setVisibility(View.INVISIBLE);
-  }
-
-  /**
-   * When the player returns from fullscreen, show the video list again.
-   */
-  @Override
-  public void onReturnFromFullscreen() {
-    videoListView.setVisibility(View.VISIBLE);
   }
 
   /**
